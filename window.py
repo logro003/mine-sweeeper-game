@@ -36,8 +36,11 @@ central_frame.place(x=utils.frame_width(25), y=utils.frame_height(25))
 for x in range(settings.GRID_SIZE):
         for y in range(settings.GRID_SIZE):
                 c = Cell(x,y)
-                c.create_button(central_frame)
+                c.create_btn_object(central_frame)
                 c.cell_btn_object.grid(row=x, column=y)
+
+# Randomizing which cells should have mines
+Cell.randomize_mines()
 
 
 #Run the window
