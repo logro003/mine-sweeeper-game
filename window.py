@@ -39,6 +39,14 @@ for x in range(settings.GRID_SIZE):
                 c.create_btn_object(central_frame)
                 c.cell_btn_object.grid(row=x, column=y)
 
+
+# Call the label from left frame
+Cell.create_cell_count_label(left_frame)
+Cell.cell_count_label_object.place(
+        x=0,
+        y=0
+)
+
 # Randomizing which cells should have mines
 Cell.randomize_mines()
 

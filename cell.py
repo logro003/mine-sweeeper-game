@@ -1,11 +1,12 @@
-from tkinter import Button
+from tkinter import Button, Label
 import utils
 import random
 import settings
-from typing import List
 
 class Cell:
     all_cells = []
+    cell_count_label_object = None
+    cell_opened_count = 0
 
     def __init__(self, x_loc, y_loc, is_mine=False):
         self.x_loc = x_loc
@@ -20,18 +21,33 @@ class Cell:
             location,
             width=utils.button_width(utils.frame_width(75)),
             height=utils.button_height(utils.frame_height(75)),
-            text=f"{self.x_loc, self.y_loc}"
         )
         button.bind('<Button-1>', self.left_click_action) #left click
         button.bind('<Button-2>', self.right_click_action) #right click
         self.cell_btn_object = button
+
+    @staticmethod
+    def create_cell_count_label(location):
+        lbl = Label(
+            location,
+            bg= 'black',
+            fg='white',
+            text = f"Cells Lefts:{settings.CELL_COUNT- Cell.cell_opened_count}",
+            width = 12,
+            height = 4,
+            font=('Calibri', 24),
+        )
+        Cell.cell_count_label_object =  lbl
+
 
     def left_click_action(self, event): #need to add event since it is convention for tkinter
         if self.is_mine:
             print('I am a mine')
             self.show_mine()
         else:
-            print('I am no mine!')
+            if self.num_of_surrounded_mines == 0:
+                for cell in self.surrounded_cells:
+                    cell.show_cell()
             self.show_cell()
     
     def show_mine(self):
@@ -40,8 +56,13 @@ class Cell:
         self.cell_btn_object.configure(highlightbackground="red")
 
     def show_cell(self):
-        print('surrounded_cells', self.surrounded_cells)
-        print('num of mines near by', self.num_of_surrounded_mines)
+        Cell.cell_opened_count += 1
+        self.cell_btn_object.configure(text = self.num_of_surrounded_mines)
+        # replace the text of cell count label with new count
+        if Cell.cell_count_label_object:
+            Cell.cell_count_label_object.configure(
+                text= f"Cells Left:{settings.CELL_COUNT- Cell.cell_opened_count}"
+            )
     
     @property
     def surrounded_cells(self):
