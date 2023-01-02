@@ -1,1 +1,1 @@
-# pong-game
+# mine sweeper game
